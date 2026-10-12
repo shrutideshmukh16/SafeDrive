@@ -1,0 +1,34 @@
+{
+  "profile": {
+    "name": "Car Owner",
+    "phone": "+919800000000",
+    "vehicle_name": "My Car",
+    "vehicle_number": "MH-00-XX-0000",
+    "vehicle_model": "Hatchback"
+  },
+  "contacts": [
+    {
+      "id": "c1",
+      "name": "Mother",
+      "relation": "Family",
+      "phone": "+919800000001",
+      "primary": true
+    },
+    {
+      "id": "c2",
+      "name": "Brother",
+      "relation": "Family",
+      "phone": "+919800000002",
+      "primary": false
+    }
+  ],
+  "settings": {
+    "confirm_seconds": 60,
+    "notify_sms": true,
+    "notify_call": true,
+    "notify_push": true,
+    "theme": "auto",
+    "accent": "#2563eb"
+  },
+  "history": []
+}

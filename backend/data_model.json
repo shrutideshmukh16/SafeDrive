@@ -1,0 +1,60 @@
+{
+  "_description": "SafeDrive JSON data model. 'default' seeds a new store; 'schema' documents every field. The same structure is stored in Firebase Realtime Database under /safedrive.",
+  "schema": {
+    "profile": {
+      "name": "owner / driver name (string)",
+      "phone": "owner phone with optional + (string)",
+      "vehicle_name": "nickname for the vehicle (string)",
+      "vehicle_number": "registration number (string)",
+      "vehicle_model": "model (string)"
+    },
+    "contacts[]": {
+      "id": "unique id (string)",
+      "name": "contact name (string)",
+      "relation": "Family / Friend ... (string)",
+      "phone": "+91XXXXXXXXXX (string)",
+      "primary": "true for the main contact (boolean)"
+    },
+    "settings": {
+      "confirm_seconds": "time the owner has to say 'I am safe' - 15 to 180 (integer, default 60)",
+      "notify_sms": "send SMS to contacts (boolean)",
+      "notify_call": "place an automatic call (boolean)",
+      "notify_push": "send app notification (boolean)",
+      "theme": "auto | light | dark",
+      "accent": "hex colour for the UI, e.g. #2563eb"
+    },
+    "history[]": {
+      "id": "event id (string)",
+      "time": "epoch milliseconds (integer)",
+      "lat": "latitude (number)",
+      "lng": "longitude (number)",
+      "peak_g": "peak acceleration in g (number)",
+      "tilt": "tilt angle in degrees (number)",
+      "outcome": "alert_sent | false_alarm",
+      "reason": "no_response | driver_needs_help | owner_safe",
+      "alerts[]": "who was notified: { name, phone, channels: ['SMS','Call','App'] }"
+    }
+  },
+  "default": {
+    "profile": {
+      "name": "Car Owner",
+      "phone": "+919800000000",
+      "vehicle_name": "My Car",
+      "vehicle_number": "MH-00-XX-0000",
+      "vehicle_model": "Hatchback"
+    },
+    "contacts": [
+      { "id": "c1", "name": "Mother", "relation": "Family", "phone": "+919800000001", "primary": true },
+      { "id": "c2", "name": "Brother", "relation": "Family", "phone": "+919800000002", "primary": false }
+    ],
+    "settings": {
+      "confirm_seconds": 60,
+      "notify_sms": true,
+      "notify_call": true,
+      "notify_push": true,
+      "theme": "auto",
+      "accent": "#2563eb"
+    },
+    "history": []
+  }
+}

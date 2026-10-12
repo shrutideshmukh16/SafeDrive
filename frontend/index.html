@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeDrive Dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ SIDEBAR / BOTTOM NAV ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+      </span>
+      <div class="brand-text"><strong>SafeDrive</strong><small>Accident Alert System</small></div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <button class="nav-item active" data-view="dashboard">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-view="contacts">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/></svg>
+        <span>Contacts</span>
+      </button>
+      <button class="nav-item" data-view="history">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span>History</span>
+      </button>
+      <button class="nav-item" data-view="settings">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <div class="side-profile">
+      <div class="avatar" id="sideAvatar">C</div>
+      <div class="side-profile-text"><strong id="sideName">Car Owner</strong><small id="sideVehicle">My Car</small></div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="greeting">Hello</h1>
+        <p id="subGreeting">Your vehicle is being monitored.</p>
+      </div>
+      <div class="top-actions">
+        <span class="conn" id="connPill">Demo mode</span>
+        <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme" title="Toggle theme">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ---------- DASHBOARD ---------- -->
+    <section class="view active" id="view-dashboard">
+      <div class="grid">
+
+        <div class="card hero safe" id="hero">
+          <div class="hero-top">
+            <div>
+              <span class="eyebrow">Vehicle status</span>
+              <h2 id="heroTitle">Safe</h2>
+              <p id="heroText">No accident detected. Live monitoring is active.</p>
+            </div>
+            <span class="pill safe" id="heroPill"><i class="dot"></i><span id="heroPillText">Monitoring</span></span>
+          </div>
+          <div class="hero-actions">
+            <button class="btn danger" id="crashBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+              Simulate crash
+            </button>
+            <button class="btn ghost" id="resetBtn" hidden>Mark vehicle as safe</button>
+          </div>
+          <p class="hint">Simulate crash is for demos until the ESP32 hardware is connected.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Vehicle</h3></div>
+          <dl class="kv">
+            <div><dt>Name</dt><dd id="vName">-</dd></div>
+            <div><dt>Number</dt><dd id="vNumber">-</dd></div>
+            <div><dt>Model</dt><dd id="vModel">-</dd></div>
+            <div><dt>Driver</dt><dd id="vDriver">-</dd></div>
+            <div><dt>Last update</dt><dd id="vUpdated">-</dd></div>
+          </dl>
+        </div>
+
+        <div class="card map-card">
+          <div class="card-head"><h3>Live location</h3><span class="muted" id="coords">-</span></div>
+          <div id="map" class="map"><div class="map-fallback">Map could not load. Check your internet connection.</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Live sensors</h3><span class="muted">ESP32-S3</span></div>
+          <div class="meter"><div class="meter-top"><span>Acceleration</span><b id="mAccelVal">1.0 g</b></div><div class="bar"><i id="mAccel"></i></div></div>
+          <div class="meter"><div class="meter-top"><span>Tilt (gyroscope)</span><b id="mTiltVal">0&deg;</b></div><div class="bar"><i id="mTilt"></i></div></div>
+          <div class="meter"><div class="meter-top"><span>Vibration</span><b id="mVibVal">0%</b></div><div class="bar"><i id="mVib"></i></div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Quick summary</h3></div>
+          <div class="stats">
+            <div class="stat"><b id="sContacts">0</b><span>Family contacts</span></div>
+            <div class="stat"><b id="sWindow">60s</b><span>Confirm window</span></div>
+            <div class="stat"><b id="sEvents">0</b><span>Past events</span></div>
+          </div>
+        </div>
+
+        <div class="card wide">
+          <div class="card-head"><h3>Latest alert</h3><span class="muted" id="alertTime"></span></div>
+          <div id="alertLog" class="alert-log"><p class="empty">No alerts sent yet.</p></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ---------- CONTACTS ---------- -->
+    <section class="view" id="view-contacts">
+      <div class="grid two">
+        <div class="card">
+          <div class="card-head"><h3>Add family contact</h3></div>
+          <form id="contactForm" class="form" novalidate>
+            <label>Name<input id="cName" type="text" maxlength="40" placeholder="e.g. Mother" required></label>
+            <label>Relationship<input id="cRelation" type="text" maxlength="30" placeholder="e.g. Family"></label>
+            <label>Phone number<input id="cPhone" type="tel" placeholder="+91 98765 43210" required></label>
+            <p class="form-error" id="contactError"></p>
+            <button class="btn primary" type="submit">Add contact</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Linked contacts</h3><span class="muted" id="contactCount">0 of 10</span></div>
+          <ul class="list" id="contactList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- HISTORY ---------- -->
+    <section class="view" id="view-history">
+      <div class="card">
+        <div class="card-head"><h3>Accident history</h3><button class="btn ghost small" id="clearHistory">Clear</button></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Date &amp; time</th><th>Outcome</th><th>Reason</th><th>Impact</th><th>Notified</th><th>Location</th></tr></thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+        <p class="empty" id="historyEmpty">No events recorded yet.</p>
+      </div>
+    </section>
+
+    <!-- ---------- SETTINGS ---------- -->
+    <section class="view" id="view-settings">
+      <div class="grid two">
+
+        <div class="card">
+          <div class="card-head"><h3>Owner &amp; vehicle</h3></div>
+          <form class="form" id="profileForm" novalidate>
+            <label>Your name<input id="pName" type="text" maxlength="40"></label>
+            <label>Your phone<input id="pPhone" type="tel"></label>
+            <label>Vehicle nickname<input id="pVehicleName" type="text" maxlength="30"></label>
+            <label>Vehicle number<input id="pVehicleNumber" type="text" maxlength="20"></label>
+            <label>Vehicle model<input id="pVehicleModel" type="text" maxlength="30"></label>
+            <p class="form-error" id="profileError"></p>
+            <button class="btn primary" type="submit">Save profile</button>
+          </form>
+        </div>
+
+        <div class="stack">
+          <div class="card">
+            <div class="card-head"><h3>Safety confirmation</h3></div>
+            <p class="muted tight">After a crash is detected you get this much time to tap <b>I am safe</b>. If you do nothing, family is alerted automatically.</p>
+            <div class="range-row">
+              <input type="range" id="sConfirm" min="15" max="180" step="5" value="60">
+              <output id="sConfirmOut">60 s</output>
+            </div>
+            <label class="check"><input type="checkbox" id="sSms" checked> Send SMS to family</label>
+            <label class="check"><input type="checkbox" id="sCall" checked> Place automatic call</label>
+            <label class="check"><input type="checkbox" id="sPush" checked> Send app notification</label>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Personalize</h3></div>
+            <div class="field-label">Theme</div>
+            <div class="seg" id="themeSeg">
+              <button data-theme="auto">Auto</button><button data-theme="light">Light</button><button data-theme="dark">Dark</button>
+            </div>
+            <div class="field-label">Accent colour</div>
+            <div class="swatches" id="swatches"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Backend connection</h3></div>
+            <p class="muted tight">Leave empty to run in demo mode (data stays in this browser). To connect, enter your Python server address.</p>
+            <label class="form-inline"><input id="apiUrl" type="url" placeholder="http://localhost:5000"><button class="btn ghost" id="connectBtn" type="button">Connect</button></label>
+            <button class="btn ghost small danger-text" id="resetData" type="button">Reset demo data</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ============ CONFIRMATION OVERLAY ============ -->
+<div class="overlay" id="overlay" hidden>
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="mTitle">
+    <span class="pill danger"><i class="dot"></i>Possible accident detected</span>
+    <h2 id="mTitle">Are you okay?</h2>
+    <p class="muted">We will alert your family when the timer ends unless you confirm you are safe.</p>
+    <div class="ring">
+      <svg viewBox="0 0 120 120" width="180" height="180">
+        <circle class="ring-bg" cx="60" cy="60" r="54"></circle>
+        <circle class="ring-fg" id="ringFg" cx="60" cy="60" r="54"></circle>
+      </svg>
+      <div class="ring-num"><b id="ringNum">60</b><span>seconds</span></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn safe-btn" id="btnSafe">I am safe</button>
+      <button class="btn danger" id="btnHelp">I need help</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
